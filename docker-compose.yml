@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+  db:
+    image: postgres:9.6-alpine
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  server:
+    build: .
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    ports:
+      - "4004:4000"
+    depends_on:
+      - db
+    command:
+      - ./run.sh
+    env_file: secret.env
+volumes:
+  db:
